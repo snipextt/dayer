@@ -12,13 +12,13 @@ export class AuthenticatedHttpClient {
     tokenCallBack: (arg: Record<string, any>) => Promise<string | null>,
   ) {
     this.http = axios.create({
-      baseURL: "http://localhost:3000/api",
+      baseURL: import.meta.env.VITE_API_URL as string,
     });
     this.http.interceptors.response.use(
       (response) => response.data,
       async (error) => {
         Promise.reject(error);
-        return error.response.data;
+        return error.response?.data || { error: error.message };
       },
     );
 

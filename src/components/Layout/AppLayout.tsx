@@ -7,10 +7,6 @@ interface AppLayoutProps {
 
 export const AppLayout: FC<AppLayoutProps> = ({ children, className }) => {
   return (
-    <div
-      className={`w-screen h-screen bg-gray-100 text-slate-700 dark:bg-gray-950 dark:text-slate-300 ${className}`}
-    >
-      {children}
-    </div>
+    <div className={`w-screen h-screen ${className || ""}`}>{children}</div>
   );
 };

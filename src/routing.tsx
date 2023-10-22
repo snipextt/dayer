@@ -13,11 +13,11 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+      {
+        path: "/onboarding",
+        element: <Onboarding />,
+      },
     ],
-  },
-  {
-    path: "/onboarding",
-    element: <Onboarding />,
   },
   {
     path: "/oauth2callback",

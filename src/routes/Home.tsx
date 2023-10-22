@@ -1,5 +1,10 @@
-import { Button } from "@nextui-org/react";
-import { useServices } from "../providers/ServiceProvider";
+// import { useServices } from "@/providers/ServiceProvider";
+import { Outlet } from "react-router-dom";
+
+import { Sidebar } from "@/components/Layout/Sidebar";
+import { Navbar } from "@/components/Layout/Navbar";
+import { Divider } from "@nextui-org/react";
+import { useServices } from "@/providers/ServiceProvider";
 
 const Home = () => {
   /**
@@ -7,27 +12,16 @@ const Home = () => {
    */
   const { calendarService } = useServices();
 
-  /**
-   * Effects
-   */
-  const connectGoogleCalender = async () => {
-    const res = await calendarService.getGoogleOauthURI();
-    window.open(res.data.authURI, "_self");
-  };
-
-  const fetchAllCalenderConnection = async () => {
-    const connections = await calendarService.getAllLinkedConnections();
-    console.log(connections);
-  };
+  calendarService.getGoogleOauthURI();
 
   return (
-    <div className="h-full flex flex-col gap-12 justify-center items-center">
-      <Button color="primary" onClick={connectGoogleCalender}>
-        Connect Google Account
-      </Button>
-      <Button color="primary" onClick={fetchAllCalenderConnection}>
-        Fetch Events
-      </Button>
+    <div className="h-full flex">
+      <Sidebar />
+      <Divider orientation="vertical" />
+      <div className="container p-0">
+        <Navbar />
+        <Outlet />
+      </div>
     </div>
   );
 };

@@ -19,13 +19,16 @@ export class CalendarService {
     );
   }
 
-  async getAllCalendarsForConnection(calendarId: string) {
+  async getAllCalendarsForConnection(connectionId: string) {
     return this.http.get<GoogleCalendar[]>(
-      `${this.baseUrl}/google?calendar_id=${calendarId}`,
+      `${this.baseUrl}/google?connection_id=${connectionId}`,
     );
   }
 
-  async syncGoogleCalendars(calendars: GoogleCalendar[]) {
-    return this.http.post(`${this.baseUrl}/sync/google`, calendars);
+  async syncGoogleCalendars(connectionId: string, calendars: GoogleCalendar[]) {
+    return this.http.post(
+      `${this.baseUrl}/sync/google?connection_id=${connectionId}`,
+      calendars,
+    );
   }
 }

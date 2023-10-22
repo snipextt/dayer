@@ -2,7 +2,8 @@
 import { FC, useState, useEffect } from "react";
 
 /** Components **/
-import { OAuthCallbackInProgress } from "../OAuthCallbackInProgress";
+import { OAuthCallbackInProgress } from "../CalendarConnectionInProgress";
+import { CalendarConnectionSuccess } from "@/components/CalendarConnectionSuccess";
 
 /** Utilities **/
 import { useServices } from "@/providers/ServiceProvider";
@@ -11,7 +12,7 @@ import { googleCalendarScopeValid } from "@/utils/scope";
 /** Assets **/
 import { AnimatePresence } from "framer-motion";
 import { SyncStepOne } from "./SyncStepOne";
-import { AppLayout } from "../AppLayout";
+import { AppLayout } from "@/components/Layout/AppLayout";
 
 interface GoogleCalendarOAuthCallbackProps {
   state: string | null;
@@ -75,18 +76,12 @@ export const GoogleCalendarOAuthCallback: FC<
         )}
         {currentStep === 1 && (
           <SyncStepOne
-            calendarId={calendarId!}
+            connectionId={calendarId!}
             step={1}
             paginate={() => setCurrentStep(2)}
           />
         )}
-        {currentStep === 2 && (
-          <SyncStepOne
-            calendarId={calendarId!}
-            step={2}
-            paginate={() => setCurrentStep(2)}
-          />
-        )}
+        {currentStep === 2 && <CalendarConnectionSuccess step={2} />}
       </AnimatePresence>
     </AppLayout>
   );

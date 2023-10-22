@@ -60,7 +60,7 @@ export const CalendarCheckbox: FC<CalendarCheckboxProps> = ({
         <div className="flex flex-col items-end gap-1">
           <span className="text-tiny text-default-500">{timeZone}</span>
           {showChip && (
-            <Chip color={"primary"} size="sm" variant="flat">
+            <Chip color={"success"} size="sm" variant="flat">
               Primary
             </Chip>
           )}
