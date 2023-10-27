@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 import { useServices } from "@/providers/ServiceProvider";
 import {
@@ -12,8 +11,9 @@ import {
   Divider,
   Skeleton,
 } from "@nextui-org/react";
-import { CalendarCheckbox } from "../CalendarCheckbox";
-import { GoogleCalendar } from "@/models/calendar";
+import { CalendarCheckbox } from "@/components/ui/CalendarCheckbox";
+import { GoogleCalendar } from "@/schema/calendar";
+import { AnimatedStep } from "@/components/Animated/AnimatedStep";
 
 interface SycnStepOneProps {
   connectionId: string;
@@ -69,14 +69,7 @@ export const SyncStepOne: FC<SycnStepOneProps> = ({
   }, []);
 
   return (
-    <motion.div
-      className="max-w-[90vw]"
-      key={step}
-      initial={{ opacity: 0, x: -1000 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 1000 }}
-      transition={{ duration: 0.4 }}
-    >
+    <AnimatedStep step={step}>
       <Card className="w-[440px] max-w-[100%]">
         <CardHeader className="flex flex-col justify-center gap-1">
           <h3 className="text-medium font-medium">Your Calendars</h3>
@@ -126,6 +119,6 @@ export const SyncStepOne: FC<SycnStepOneProps> = ({
           )}
         </CardFooter>
       </Card>
-    </motion.div>
+    </AnimatedStep>
   );
 };

@@ -14,6 +14,7 @@ import ServiceProvider from "@/providers/ServiceProvider";
 import "./App.scss";
 import { GlobalPopupProvider } from "./providers/GlobalPopupProvder";
 import { useEffect } from "react";
+import { RecoilRoot } from "recoil";
 
 if (!import.meta.env.VITE_CLERK_KEY) {
   throw new Error("Missing Publishable Key");
@@ -36,27 +37,29 @@ function App() {
   }, [themeMode]);
 
   return (
-    <div className="app">
-      <GlobalPopupProvider>
-        <NextUIProvider>
-          <ClerkProvider
-            appearance={{
-              baseTheme: ClerkThemes[themeMode],
-            }}
-            publishableKey={clerkPubKey}
-          >
-            <SignedIn>
-              <ServiceProvider>
-                <RouterProvider router={router} />
-              </ServiceProvider>
-            </SignedIn>
-            <SignedOut>
-              <RedirectToSignIn />
-            </SignedOut>
-          </ClerkProvider>
-        </NextUIProvider>
-      </GlobalPopupProvider>
-    </div>
+    <RecoilRoot>
+      <div className="app">
+        <GlobalPopupProvider>
+          <NextUIProvider>
+            <ClerkProvider
+              appearance={{
+                baseTheme: ClerkThemes[themeMode],
+              }}
+              publishableKey={clerkPubKey}
+            >
+              <SignedIn>
+                <ServiceProvider>
+                  <RouterProvider router={router} />
+                </ServiceProvider>
+              </SignedIn>
+              <SignedOut>
+                <RedirectToSignIn />
+              </SignedOut>
+            </ClerkProvider>
+          </NextUIProvider>
+        </GlobalPopupProvider>
+      </div>
+    </RecoilRoot>
   );
 }
 

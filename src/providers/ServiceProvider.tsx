@@ -3,6 +3,8 @@ import { CalendarService } from "../services/calendar";
 import { AuthenticatedHttpClient } from "../services/http";
 import { useAuth } from "@clerk/clerk-react";
 import { UserService } from "../services/user";
+import { ExtensionService } from "@/services/extension";
+import { WorkspaceSerice } from "@/services/workspace";
 
 interface ServiceProviderProps {
   children: ReactNode;
@@ -11,6 +13,8 @@ interface ServiceProviderProps {
 interface ServiceContextProps {
   calendarService: CalendarService;
   userService: UserService;
+  extensionService: ExtensionService;
+  workspaceService: WorkspaceSerice;
 }
 
 const ServiceContext = createContext<ServiceContextProps | undefined>(
@@ -23,6 +27,8 @@ const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
   const services: ServiceContextProps = {
     calendarService: new CalendarService(authticatedHttpClient),
     userService: new UserService(authticatedHttpClient),
+    extensionService: new ExtensionService(authticatedHttpClient),
+    workspaceService: new WorkspaceSerice(authticatedHttpClient),
   };
   return (
     <ServiceContext.Provider value={services}>

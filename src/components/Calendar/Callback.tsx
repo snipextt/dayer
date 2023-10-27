@@ -1,18 +1,21 @@
 /** React core **/
 import { FC, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 /** Components **/
 import { OAuthCallbackInProgress } from "../CalendarConnectionInProgress";
-import { CalendarConnectionSuccess } from "@/components/CalendarConnectionSuccess";
+import { Success } from "@/components/Result/Success";
+import { SyncStepOne } from "./SyncStepOne";
+import { AppLayout } from "@/components/Layout/AppLayout";
+import { AnimatedStep } from "../Animated/AnimatedStep";
 
 /** Utilities **/
 import { useServices } from "@/providers/ServiceProvider";
 import { googleCalendarScopeValid } from "@/utils/scope";
+import { AnimatePresence } from "framer-motion";
 
 /** Assets **/
-import { AnimatePresence } from "framer-motion";
-import { SyncStepOne } from "./SyncStepOne";
-import { AppLayout } from "@/components/Layout/AppLayout";
+import CheckIcon from "@/assets/check.png";
 
 interface GoogleCalendarOAuthCallbackProps {
   state: string | null;
@@ -27,6 +30,7 @@ export const GoogleCalendarOAuthCallback: FC<
    * Hooks
    */
   const { userService, calendarService } = useServices();
+  const navigate = useNavigate();
 
   /**
    * State
@@ -81,7 +85,19 @@ export const GoogleCalendarOAuthCallback: FC<
             paginate={() => setCurrentStep(2)}
           />
         )}
-        {currentStep === 2 && <CalendarConnectionSuccess step={2} />}
+        {currentStep === 2 && (
+          <AnimatedStep
+            step={2}
+            children={
+              <Success
+                image={CheckIcon}
+                title="Conencted Google Calendar"
+                description="Redirecting you to dashboard"
+                callback={() => setTimeout(() => navigate("/"), 2000)}
+              />
+            }
+          />
+        )}
       </AnimatePresence>
     </AppLayout>
   );

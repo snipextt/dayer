@@ -4,7 +4,7 @@ import { CircularProgress } from "@nextui-org/react";
 import { motion } from "framer-motion";
 
 import GoogleCalendarIcon from "@/assets/google-calender.svg?react";
-import { OAuthError } from "./GoogleCalendar/OAuthError";
+import { Error } from "./Result/Error";
 
 type OAuthProvider = "google_calendar" | "outlook_calendar";
 
@@ -50,7 +50,7 @@ export const OAuthCallbackInProgress: FC<OAuthCallbackInProgressProps> = ({
           </h3>
         </>
       )}
-      {error && <OAuthError error={error} retry={retryAction} />}
+      {error && <Error error={error} retry={retryAction} />}
     </motion.div>
   );
 };

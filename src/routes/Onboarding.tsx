@@ -1,93 +1,23 @@
 import { useEffect, useState } from "react";
-
 import { CreateOrganization, useUser } from "@clerk/clerk-react";
 
 import { useServices } from "@/providers/ServiceProvider";
 import { FullHeightSpinner } from "@/components/Loaders/FullHeightSpinner";
 import { Centered } from "@/components/Layout/Centered";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Divider,
-} from "@nextui-org/react";
-import { Button } from "@/components/Layout/Button";
-import { ThemeMode, useThemeMode } from "@/providers/ThemeModeProvider";
 
-import JiraDarkModeIcon from "@/assets/logo-gradient-white-jira.svg?react";
-import JiraLightModeIcon from "@/assets/logo-gradient-blue-jira.svg?react";
-import ClickUpDarkModeIcon from "@/assets/clickupdark.png";
-import ClickUpLightModeIcon from "@/assets/clickupwhite.png";
-import TimedoctorIcon from "@/assets/timedoctor.png";
-import ImageWrapper from "@/components/ui/ImageWrapper";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { SelectExtensions } from "@/components/Onboarding/SelectExtension";
+import { Success } from "@/components/Result/Success";
+
+// Assets
+import CheckIcon from "@/assets/check.png";
 
 enum OnboardingStep {
   CreateAccount,
   CreateOrganization,
   SelectExtensions,
+  OnboardingComplete,
 }
-
-const Icons = {
-  [ThemeMode.LIGHT]: [
-    {
-      icon: <JiraLightModeIcon className="w-32" />,
-    },
-    {
-      icon: <ImageWrapper src={TimedoctorIcon} />,
-    },
-    {
-      icon: <ImageWrapper src={ClickUpLightModeIcon} />,
-    },
-  ],
-  [ThemeMode.DARK]: [
-    {
-      icon: <JiraDarkModeIcon className="w-32" />,
-    },
-    {
-      icon: <ImageWrapper src={TimedoctorIcon} />,
-    },
-    {
-      icon: <ImageWrapper src={ClickUpDarkModeIcon} />,
-    },
-  ],
-};
-
-const SelectExtensions = () => {
-  const { themeMode } = useThemeMode();
-  const icons = Icons[themeMode];
-  const [selectedExtensions, setSelectedExtensions] = useState<
-    Record<number, boolean>
-  >({});
-
-  return (
-    <Card className="w-[460px]">
-      <CardHeader className="flex justify-center">Enable Extensions</CardHeader>
-      <Divider />
-      <CardBody className="grid grid-cols-3	gap-4">
-        {icons.map(({ icon }, index) => (
-          <div
-            onClick={() =>
-              setSelectedExtensions((v) => ({
-                ...v,
-                [index]: !v[index],
-              }))
-            }
-            className={`rounded-lg border cursor-pointer flex flex-col items-center justify-center border p-4 ${
-              selectedExtensions[index] ? "border-primary" : ""
-            }`}
-          >
-            {icon}
-          </div>
-        ))}
-      </CardBody>
-      <CardFooter>
-        <Button className="w-full">Create Workspace</Button>
-      </CardFooter>
-    </Card>
-  );
-};
 
 const Onboarding = () => {
   /**
@@ -95,13 +25,16 @@ const Onboarding = () => {
    */
   const { user } = useUser();
   const { userService } = useServices();
+  const navigate = useNavigate();
 
   /**
    * State
    */
   const [currentOnboardingStep, setCurrentOnboardingStep] =
-    useState<OnboardingStep>(OnboardingStep.SelectExtensions);
+    useState<OnboardingStep>(OnboardingStep.CreateAccount);
   const [query] = useSearchParams();
+
+  const afterCreateOrganizationUrl = window.location.href + "?step=2";
 
   /**
    * Effects
@@ -131,14 +64,32 @@ const Onboarding = () => {
   if (currentOnboardingStep === OnboardingStep.CreateOrganization)
     return (
       <Centered>
-        <CreateOrganization />
+        <CreateOrganization
+          afterCreateOrganizationUrl={afterCreateOrganizationUrl}
+        />
       </Centered>
     );
 
   if (currentOnboardingStep === OnboardingStep.SelectExtensions)
     return (
       <Centered>
-        <SelectExtensions />
+        <SelectExtensions
+          paginate={() =>
+            setCurrentOnboardingStep(OnboardingStep.OnboardingComplete)
+          }
+        />
+      </Centered>
+    );
+
+  if (currentOnboardingStep === OnboardingStep.OnboardingComplete)
+    return (
+      <Centered>
+        <Success
+          image={CheckIcon}
+          title="Workspace Created"
+          description="Redirecting to your workspace"
+          callback={() => setTimeout(() => navigate("/"), 2000)}
+        />
       </Centered>
     );
 

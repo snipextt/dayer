@@ -1,4 +1,4 @@
-import { CalendarConnections, GoogleCalendar } from "../models/calendar";
+import { CalendarConnections, GoogleCalendar } from "@/schema/calendar";
 import { AuthenticatedHttpClient } from "./http";
 
 export class CalendarService {

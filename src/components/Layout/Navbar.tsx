@@ -3,7 +3,7 @@ import { WorkspaceSwitcher } from "@/components/Popups/WorkspaceSwitcher";
 import IconWrapper from "@/components/ui/IconWrapper";
 import { RocketIcon, SunIcon, MoonIcon } from "@radix-ui/react-icons";
 import { ThemeMode, useThemeMode } from "@/providers/ThemeModeProvider";
-import { useCommandModalState } from "@/providers/GlobalPopupProvder";
+import { useActionDialogState } from "@/providers/GlobalPopupProvder";
 
 const AlternateThemeIcon = {
   [ThemeMode.LIGHT]: <MoonIcon />,
@@ -12,13 +12,13 @@ const AlternateThemeIcon = {
 
 export const Navbar = () => {
   const { themeMode, setThemeMode } = useThemeMode();
-  const { setOpen } = useCommandModalState();
+  const { setOpen } = useActionDialogState();
 
   return (
     <nav className="flex justify-between items-center border-b py-3 px-3 pr-3 gap-4">
       <input
         type="text"
-        placeholder="Search Anything"
+        placeholder="Search Workspace"
         className="p-2 w-full text-sm bg-background outline-0"
       />
       <IconWrapper

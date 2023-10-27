@@ -5,7 +5,7 @@ interface ErrorProps {
   error: string;
   retry: () => Promise<void>;
 }
-export const OAuthError: FC<ErrorProps> = ({ error, retry }) => {
+export const Error: FC<ErrorProps> = ({ error, retry }) => {
   return (
     <>
       <h3> {error} </h3>

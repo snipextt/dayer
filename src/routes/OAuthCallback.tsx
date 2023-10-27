@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { GoogleCalendarOAuthCallback } from "@/components/GoogleCalendar/Callback";
+import { GoogleCalendarOAuthCallback } from "@/components/Calendar/Callback";
 
 const OAuthCallback = () => {
   /**
