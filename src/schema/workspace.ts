@@ -1,11 +1,15 @@
-interface Workspace {
+import { Connections } from "./connection";
+
+export interface Workspace {
   id: string;
   name: string;
   clerkOrgId: string;
   extensions: string[];
+  connections: Connections;
 }
 
-interface WorkspaceState {
-  workspace: Workspace;
-  features: string[];
+export interface WorkspaceResponse {
+  id: string;
+  pendingConnections: string[];
+  roleBasedResources: string[];
 }

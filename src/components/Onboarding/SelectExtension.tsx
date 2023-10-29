@@ -14,6 +14,7 @@ import { ThemeMode, useThemeMode } from "@/providers/ThemeModeProvider";
 import { useRecoilState } from "recoil";
 import { ExtensionState } from "@/store/ExtensionState";
 import { useServices } from "@/providers/ServiceProvider";
+import { WorkspaceState } from "@/store/WorkspaceState";
 
 interface SelectExtensionsProps {
   paginate: () => void;
@@ -30,6 +31,7 @@ export const SelectExtensions: FC<SelectExtensionsProps> = ({ paginate }) => {
    */
   const { themeMode } = useThemeMode();
   const [extensions] = useRecoilState(ExtensionState);
+  const [_, setWorkspace] = useRecoilState(WorkspaceState);
   const iconKey = themeMode === ThemeMode.LIGHT ? "iconLight" : "iconDark";
   const [selectedExtensions, setSelectedExtensions] = useState<
     Record<string, boolean>
@@ -44,7 +46,8 @@ export const SelectExtensions: FC<SelectExtensionsProps> = ({ paginate }) => {
     const extensions = Object.keys(selectedExtensions).filter(
       (key) => selectedExtensions[key],
     );
-    await workspaceService.createWorkspace(extensions);
+    const ws = await workspaceService.createWorkspace(extensions);
+    setWorkspace(ws.data);
     setSubmitting(false);
     paginate();
   };
@@ -54,17 +57,17 @@ export const SelectExtensions: FC<SelectExtensionsProps> = ({ paginate }) => {
       <CardHeader className="flex justify-center">Enable Extensions</CardHeader>
       <Divider />
       <CardBody className="grid grid-cols-3	gap-4">
-        {extensions?.map(({ [iconKey]: imgSrc, name, id }) => (
+        {extensions?.map(({ [iconKey]: imgSrc, name, key }) => (
           <div
-            key={id}
+            key={key}
             onClick={() =>
               setSelectedExtensions((v) => ({
                 ...v,
-                [id]: !v[id],
+                [key]: !v[key],
               }))
             }
             className={`rounded-lg border cursor-pointer flex flex-col items-center justify-center border p-4 ${
-              selectedExtensions[id] ? "border-primary" : ""
+              selectedExtensions[key] ? "border-primary" : ""
             }`}
           >
             <ImageWrapper src={imgSrc} alt={name} />

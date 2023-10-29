@@ -1,9 +1,8 @@
-import { FC, ReactNode } from "react";
+import { FC, HTMLAttributes } from "react";
 import { motion } from "framer-motion";
 
-interface AnimatedStepProps {
+interface AnimatedStepProps extends HTMLAttributes<HTMLDivElement> {
   step: number;
-  children: ReactNode;
 }
 
 export const AnimatedStep: FC<AnimatedStepProps> = ({ step, children }) => {

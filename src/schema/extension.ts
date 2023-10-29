@@ -4,6 +4,7 @@ export interface Extension {
   description: string;
   iconLight: string;
   iconDark: string;
+  key: string;
 }
 
 export type Extensions = Extension[];

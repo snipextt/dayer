@@ -11,6 +11,8 @@ import { FullHeightSpinner } from "@/components/Loaders/FullHeightSpinner";
 import { useRecoilState } from "recoil";
 import { ExtensionState } from "@/store/ExtensionState";
 import { useServices } from "@/providers/ServiceProvider";
+import { WorkspaceState } from "@/store/WorkspaceState";
+import { setCurrentWorkspaceId } from "@/utils/workspace";
 
 const Root = () => {
   /**
@@ -25,6 +27,7 @@ const Root = () => {
    * State
    */
   const [_, setExtensions] = useRecoilState(ExtensionState);
+  const [__, setWorkSpace] = useRecoilState(WorkspaceState);
 
   /**
    * Effects
@@ -40,6 +43,8 @@ const Root = () => {
     const workspace = await workspaceService.fetchCurrentWorkspace();
     if (workspace.error) return;
 
+    setWorkSpace(workspace.data);
+    setCurrentWorkspaceId(workspace.data?.id);
     if (!workspace.data) navigate("/onboarding?step=2");
   };
 

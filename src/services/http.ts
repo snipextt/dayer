@@ -1,4 +1,7 @@
 import axios, { Axios } from "axios";
+
+import { getCurrentWorkspaceId } from "@/utils/workspace";
+
 interface Response<T> {
   data: T;
   message: string;
@@ -29,6 +32,7 @@ export class AuthenticatedHttpClient {
         });
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
+          config.headers['x-workspace-id'] = getCurrentWorkspaceId();
         }
         return config;
       },

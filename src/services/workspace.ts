@@ -1,4 +1,6 @@
+import { TimeDoctorAuthCredentials } from "@/schema/timedoctor";
 import { AuthenticatedHttpClient } from "./http";
+import { Workspace, WorkspaceResponse } from "@/schema/workspace";
 
 export class WorkspaceSerice {
   http: AuthenticatedHttpClient;
@@ -9,14 +11,17 @@ export class WorkspaceSerice {
   }
 
   fetchCurrentWorkspace() {
-    return this.http.get<Workspace>(this.baseUrl);
+    return this.http.get<WorkspaceResponse>(this.baseUrl);
   }
 
   createWorkspace(extensions: string[]) {
-    return this.http.post<Workspace>(this.baseUrl, extensions);
+    return this.http.post<WorkspaceResponse>(this.baseUrl, extensions);
   }
 
-  connectTimeDocotorAccount() {
-    return this.http.get<Workspace>(`${this.baseUrl}/connect`);
+  connectTimeDocotorAccount(credentails: TimeDoctorAuthCredentials) {
+    return this.http.post<Workspace>(
+      `${this.baseUrl}/timedoctor/connect`,
+      credentails,
+    );
   }
 }

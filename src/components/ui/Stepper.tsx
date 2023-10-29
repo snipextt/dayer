@@ -22,7 +22,7 @@ export const Stepper: FC<StepperProps> = ({
     <div
       className={`flex ${
         orientation === "horizontal" ? "flex-col" : "flex-row"
-      } gap-4 ${className || ""}`}
+      } gap-4 w-full h-full ${className || ""}`}
     >
       <div
         className={`flex ${
@@ -61,7 +61,9 @@ export const Stepper: FC<StepperProps> = ({
           );
         })}
       </div>
-      <motion.div className="flex-1">{children[currentStep - 1]}</motion.div>
+      <motion.div className={`flex-1 ${
+        orientation === 'horizontal' ? '' : 'flex flex-col'
+      }`}>{children[currentStep - 1]}</motion.div>
     </div>
   );
 };
