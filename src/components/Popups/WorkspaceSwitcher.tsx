@@ -50,7 +50,7 @@ export const WorkspaceSwitcher = () => {
   };
 
   return (
-    <Popover placement="bottom" color="secondary">
+    <Popover backdrop="blur" placement="bottom" color="secondary">
       <PopoverTrigger>
         <div className="flex items-center gap-4 cursor-pointer hover:bg-secondary py-2 px-3 rounded-lg">
           <div className="name-section">

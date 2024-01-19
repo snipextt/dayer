@@ -5,6 +5,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { UserService } from "../services/user";
 import { ExtensionService } from "@/services/extension";
 import { WorkspaceSerice } from "@/services/workspace";
+import { AssistantService } from "@/services/assistant";
 
 interface ServiceProviderProps {
   children: ReactNode;
@@ -15,6 +16,7 @@ interface ServiceContextProps {
   userService: UserService;
   extensionService: ExtensionService;
   workspaceService: WorkspaceSerice;
+  assistatService: AssistantService;
 }
 
 const ServiceContext = createContext<ServiceContextProps | undefined>(
@@ -29,6 +31,7 @@ const ServiceProvider: FC<ServiceProviderProps> = ({ children }) => {
     userService: new UserService(authticatedHttpClient),
     extensionService: new ExtensionService(authticatedHttpClient),
     workspaceService: new WorkspaceSerice(authticatedHttpClient),
+    assistatService: new AssistantService(authticatedHttpClient)
   };
   return (
     <ServiceContext.Provider value={services}>

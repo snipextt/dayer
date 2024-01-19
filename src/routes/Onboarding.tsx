@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CreateOrganization, useUser } from "@clerk/clerk-react";
 
 import { useServices } from "@/providers/ServiceProvider";
@@ -26,6 +26,7 @@ const Onboarding = () => {
   const { user } = useUser();
   const { userService } = useServices();
   const navigate = useNavigate();
+  const onboardingUser = useRef(false);
 
   /**
    * State
@@ -34,7 +35,10 @@ const Onboarding = () => {
     useState<OnboardingStep>(OnboardingStep.CreateAccount);
   const [query] = useSearchParams();
 
-  const afterCreateOrganizationUrl = window.location.href + "?step=2";
+  let currentUrl = new URL(window.location.href);
+  currentUrl.searchParams.set("step", "2");
+
+  const afterCreateOrganizationUrl = currentUrl.toString();
 
   /**
    * Effects
@@ -50,7 +54,10 @@ const Onboarding = () => {
     if (user!.externalId) {
       setCurrentOnboardingStep(step || 1);
     } else {
-      completeOnboarding();
+      if(!onboardingUser.current) {
+        onboardingUser.current = true;
+        completeOnboarding();
+      }
     }
   };
 

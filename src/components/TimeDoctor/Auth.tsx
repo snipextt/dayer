@@ -1,11 +1,8 @@
-import { ChangeEvent,  FC, useState } from "react";
-
-import { useServices } from "@/providers/ServiceProvider";
-import { checkValidTimedoctorAuth } from "@/utils/validtor";
-
+import { ChangeEvent, FC, useState } from "react";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -16,66 +13,51 @@ import { Input } from "@/components/ui/Input";
 import { Switch } from "@nextui-org/react";
 import { ErrorLabel } from "../ui/ErrorLabel";
 import { AnimatedStep } from "../Animated/AnimatedStep";
+import { TimeDoctorAuthCredentials } from "@/schema/timedoctor";
+import { Checkbox } from "../ui/Checkbox";
 
 interface AuthProps {
-  callback?: () => void;
+  callback: (credentials: TimeDoctorAuthCredentials) => Promise<void>;
   step: number;
+  error: string;
+  setError: (error: string) => void;
 }
 
 enum FormField {
   Email,
   Password,
-  Totp
+  Totp,
 }
 
-export const Auth: FC<AuthProps> = ({ callback, step }) => {
-  const { workspaceService } = useServices();
-
+export const Auth: FC<AuthProps> = ({ callback, step, setError, error }) => {
   const [totpEnabled, setTotpEnabled] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [totp, setTotp] = useState("");
-  const [error, setError] = useState("");
 
-  const handleSubmit = async () => {
-    const credentials = { email, password, totp, totpEnabled };
-    const { valid, error } = checkValidTimedoctorAuth(credentials);
-    if (!valid) {
-      setError(error!);
-      return;
-    }
-   const res = await workspaceService.connectTimeDocotorAccount(credentials);
-    if(res.error) {
-      setError(res.message);
-      return;
-    }
-    if (callback) {
-      callback();
+  const setValues = (e: ChangeEvent<HTMLInputElement>, field: FormField) => {
+    setError("");
+    const value = e.target.value;
+    switch (field) {
+      case FormField.Password:
+        setPassword(value);
+        break;
+      case FormField.Email:
+        setEmail(value);
+        break;
+      case FormField.Totp:
+        setTotp(value);
     }
   };
 
-  const setValues = (e: ChangeEvent<HTMLInputElement>, field: FormField) => {
-    setError('');
-    const value = e.target.value;
-    switch(field) {
-      case FormField.Password:
-        setPassword(value)
-      break;
-      case FormField.Email:
-        setEmail(value)
-      break;
-      case FormField.Totp:
-        setTotp(value)
-    }
-  }
-
   return (
     <AnimatedStep step={step}>
-      <Card className="w-[550px] max-w-[90vw]">
+      <Card className="w-[500px] max-w-[90vw]">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">
-            Connect TimeDoctor
-          </CardTitle>
+          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardDescription>
+            Login with your Time Doctor email and password
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
@@ -83,8 +65,8 @@ export const Auth: FC<AuthProps> = ({ callback, step }) => {
             <Input
               id="email"
               type="email"
-              placeholder="email@example.com"
               value={email}
+              placeholder="jhon.has@email.com"
               onChange={(e) => setValues(e, FormField.Email)}
             />
           </div>
@@ -93,7 +75,7 @@ export const Auth: FC<AuthProps> = ({ callback, step }) => {
             <Input
               id="password"
               type="password"
-              placeholder="**********"
+              placeholder="password"
               value={password}
               onChange={(e) => setValues(e, FormField.Password)}
             />
@@ -120,7 +102,10 @@ export const Auth: FC<AuthProps> = ({ callback, step }) => {
           {error && <ErrorLabel>{error}</ErrorLabel>}
         </CardContent>
         <CardFooter>
-          <Button onClick={handleSubmit} className="w-full">
+          <Button
+            onClick={() => callback({ email, password, totp, totpEnabled })}
+            className="w-full"
+          >
             Connect
           </Button>
         </CardFooter>

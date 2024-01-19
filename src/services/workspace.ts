@@ -1,6 +1,10 @@
-import { TimeDoctorAuthCredentials } from "@/schema/timedoctor";
+import {
+  TimeDoctorAuthCredentials,
+  TimedoctorConnectionResponse,
+} from "@/schema/timedoctor";
 import { AuthenticatedHttpClient } from "./http";
-import { Workspace, WorkspaceResponse } from "@/schema/workspace";
+import { WorkspaceMember, WorkspaceResponse, WorkspaceTeam } from "@/schema/workspace";
+import { getCurrentWorkspaceId } from "@/utils/workspace";
 
 export class WorkspaceSerice {
   http: AuthenticatedHttpClient;
@@ -11,6 +15,7 @@ export class WorkspaceSerice {
   }
 
   fetchCurrentWorkspace() {
+    if (!getCurrentWorkspaceId()) return;
     return this.http.get<WorkspaceResponse>(this.baseUrl);
   }
 
@@ -19,9 +24,32 @@ export class WorkspaceSerice {
   }
 
   connectTimeDocotorAccount(credentails: TimeDoctorAuthCredentials) {
-    return this.http.post<Workspace>(
+    return this.http.post<TimedoctorConnectionResponse>(
       `${this.baseUrl}/timedoctor/connect`,
       credentails,
     );
+  }
+
+  connectTimeDoctorCompany(company: string, parseScreencast: boolean) {
+    return this.http.post<TimedoctorConnectionResponse>(
+      `${this.baseUrl}/timedoctor/company/`,
+      {
+        company,
+        parseScreencast
+      },
+    );
+  }
+
+  createTeam(team: WorkspaceTeam) {
+    return this.http.post<WorkspaceTeam>(`${this.baseUrl}/team`, team);
+  }
+  
+  getTeam(teamId: string) {
+    return this.http.get<WorkspaceMember[]>(`${this.baseUrl}/team/${teamId}`);
+  }
+
+  insights(startDate: string, endDate: string, team: string) {
+    if(!team) return;
+    return this.http.get<Record<string, any>>(`${this.baseUrl}/insights?startDate=${startDate}&endDate=${endDate}&team=${team}`);
   }
 }

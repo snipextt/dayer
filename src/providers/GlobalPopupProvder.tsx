@@ -1,8 +1,10 @@
 import { QuickActionsDialog } from "@/components/Popups/CommandDialog";
-import { FC, ReactNode, createContext, useContext, useState } from "react";
+import { TimedoctorOnboardingPopup } from "@/components/TimeDoctor/Onboarding";
+import { createContext, FC, ReactNode, useContext, useState } from "react";
 
 enum GlobalPopupType {
   ACTION = "action",
+  TIMEDOCTOR_LOGIN = "timedoctor-login",
 }
 
 interface GlobalPopupContextProps {
@@ -18,6 +20,12 @@ const GlobalPopupContext = createContext<GlobalPopupContextProps>({
     setOpen: () => {
       throw new Error("setOpen function must be overridden");
     },
+    [GlobalPopupType.TIMEDOCTOR_LOGIN]: {
+      open: false,
+      setOpen: () => {
+        throw new Error("setOpen function must be overridden");
+      },
+    },
   },
 });
 
@@ -27,11 +35,18 @@ interface GlobalPopupProviderProps {
 
 const useInitialGlobalPopupState = () => {
   const [actionPopup, setActionPopup] = useState<boolean>(false);
+  const [timedoctorLoginPopup, setTimedoctorLoginPopup] = useState<boolean>(
+    false,
+  );
 
   return {
     [GlobalPopupType.ACTION]: {
       open: actionPopup,
       setOpen: setActionPopup,
+    },
+    [GlobalPopupType.TIMEDOCTOR_LOGIN]: {
+      open: timedoctorLoginPopup,
+      setOpen: setTimedoctorLoginPopup,
     },
   };
 };
@@ -41,14 +56,22 @@ const GlobalPopupProvider: FC<GlobalPopupProviderProps> = ({ children }) => {
     <GlobalPopupContext.Provider value={useInitialGlobalPopupState()}>
       {children}
       <QuickActionsDialog />
+      <TimedoctorOnboardingPopup />
     </GlobalPopupContext.Provider>
   );
 };
 
 export const useActionDialogState = () => {
-  const { [GlobalPopupType.ACTION]: actionPopup } =
-    useContext(GlobalPopupContext);
+  const { [GlobalPopupType.ACTION]: actionPopup } = useContext(
+    GlobalPopupContext,
+  );
   return { ...actionPopup };
 };
 
-export { GlobalPopupProvider, GlobalPopupContext, GlobalPopupType };
+export const useTimedoctorLoginDialogState = () => {
+  const { [GlobalPopupType.TIMEDOCTOR_LOGIN]: timedoctorLoginPopup } =
+    useContext(GlobalPopupContext);
+  return { ...timedoctorLoginPopup };
+};
+
+export { GlobalPopupContext, GlobalPopupProvider, GlobalPopupType };

@@ -1,16 +1,11 @@
 import { Listbox, ListboxItem, ListboxSection } from "@nextui-org/react";
 import IconWrapper from "@/components/ui/IconWrapper";
-import {
-  CalendarIcon,
-  ReaderIcon,
-  LightningBoltIcon,
-  BarChartIcon,
-  MixIcon,
-  DashboardIcon,
-  PersonIcon,
-} from "@radix-ui/react-icons";
+import { LightningBoltIcon, PersonIcon } from "@radix-ui/react-icons";
+import { useNavigate } from "react-router-dom";
 
 export const Sidebar = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="w-1/5 min-w-[280px] h-full p-3 py-1 bg-secondary flex flex-col justify-between">
       <div className="grid gap-3">
@@ -19,48 +14,26 @@ export const Sidebar = () => {
         </div>
         <Listbox>
           <ListboxItem
-            key="dashboard"
-            startContent={
-              <IconWrapper label="Dashboard" children={<DashboardIcon />} />
-            }
-          >
-            Dashboard
-          </ListboxItem>
-          <ListboxItem
+            onClick={() => navigate("./teams")}
             key="team"
             startContent={
               <IconWrapper label="Team" children={<PersonIcon />} />
             }
           >
-            Teams
+            Peers
           </ListboxItem>
-          <ListboxSection title="Productivity">
-            <ListboxItem
-              key="stats"
-              startContent={
-                <IconWrapper label="Stats" children={<BarChartIcon />} />
-              }
-            >
-              Stats
-            </ListboxItem>
-            <ListboxItem
-              key="insights"
-              startContent={
-                <IconWrapper label="Insights" children={<MixIcon />} />
-              }
-            >
-              Insights
-            </ListboxItem>
-          </ListboxSection>
+          <ListboxItem
+            key="assistant"
+            onClick={() => navigate("./assistant")}
+            startContent={
+              <IconWrapper label="Assistant" children={<LightningBoltIcon />} />
+            }
+          >
+            Assistant
+          </ListboxItem>
+          {
+            /*
           <ListboxSection title="Collaboration">
-            <ListboxItem
-              key="calendar"
-              startContent={
-                <IconWrapper label="Calendar" children={<CalendarIcon />} />
-              }
-            >
-              Calendar
-            </ListboxItem>
             <ListboxItem
               key="memo"
               startContent={
@@ -78,6 +51,8 @@ export const Sidebar = () => {
               Planner
             </ListboxItem>
           </ListboxSection>
+            */
+          }
         </Listbox>
       </div>
 

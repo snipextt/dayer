@@ -15,6 +15,7 @@ import { useRecoilState } from "recoil";
 import { ExtensionState } from "@/store/ExtensionState";
 import { useServices } from "@/providers/ServiceProvider";
 import { WorkspaceState } from "@/store/WorkspaceState";
+import { setCurrentWorkspaceId } from "@/utils/workspace";
 
 interface SelectExtensionsProps {
   paginate: () => void;
@@ -48,6 +49,7 @@ export const SelectExtensions: FC<SelectExtensionsProps> = ({ paginate }) => {
     );
     const ws = await workspaceService.createWorkspace(extensions);
     setWorkspace(ws.data);
+    setCurrentWorkspaceId(ws.data.id);
     setSubmitting(false);
     paginate();
   };

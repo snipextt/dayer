@@ -1,20 +1,25 @@
-import { Navigate, RouteObject, createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
 import OauthCallback from "./routes/OAuthCallback";
 import Onboarding from "./routes/Onboarding";
 
 import Root from "./routes/Root";
 import AppRoot from "./routes/AppRoot";
 
-import { Dashboard } from "./routes/Dashboard";
+import { Teams } from "./routes/Teams";
+import { Assistant } from "./routes/Assistant";
 
 const appRoutes: RouteObject[] = [
   {
-    path: "dashboard",
-    element: <Dashboard />,
+    path: "teams",
+    element: <Teams />,
+  },
+  {
+    path: "assistant",
+    element: <Assistant />
   },
   {
     path: "",
-    element: <Navigate to="/app/dashboard" />,
+    element: <Navigate to="/app/assistant" />,
   },
 ];
 

@@ -8,6 +8,7 @@ import {
   SignedIn,
   SignedOut,
 } from "@clerk/clerk-react";
+import "reactflow/dist/style.css";
 
 import { ThemeMode, useThemeMode } from "@/providers/ThemeModeProvider";
 import ServiceProvider from "@/providers/ServiceProvider";
@@ -39,25 +40,25 @@ function App() {
   return (
     <RecoilRoot>
       <div className="app">
-        <GlobalPopupProvider>
-          <NextUIProvider>
-            <ClerkProvider
-              appearance={{
-                baseTheme: ClerkThemes[themeMode],
-              }}
-              publishableKey={clerkPubKey}
-            >
-              <SignedIn>
-                <ServiceProvider>
+        <NextUIProvider>
+          <ClerkProvider
+            appearance={{
+              baseTheme: ClerkThemes[themeMode],
+            }}
+            publishableKey={clerkPubKey}
+          >
+            <SignedIn>
+              <ServiceProvider>
+                <GlobalPopupProvider>
                   <RouterProvider router={router} />
-                </ServiceProvider>
-              </SignedIn>
-              <SignedOut>
-                <RedirectToSignIn />
-              </SignedOut>
-            </ClerkProvider>
-          </NextUIProvider>
-        </GlobalPopupProvider>
+                </GlobalPopupProvider>
+              </ServiceProvider>
+            </SignedIn>
+            <SignedOut>
+              <RedirectToSignIn />
+            </SignedOut>
+          </ClerkProvider>
+        </NextUIProvider>
       </div>
     </RecoilRoot>
   );

@@ -1,4 +1,4 @@
-import axios, { Axios } from "axios";
+import axios, { Axios, AxiosRequestConfig } from "axios";
 
 import { getCurrentWorkspaceId } from "@/utils/workspace";
 
@@ -40,12 +40,12 @@ export class AuthenticatedHttpClient {
     );
   }
 
-  async get<T>(url: string): Promise<Response<T>> {
-    return this.http.get(url);
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<Response<T>> {
+    return this.http.get(url, config);
   }
 
-  async post<T>(url: string, data?: Record<string, any>): Promise<Response<T>> {
-    return this.http.post(url, data);
+  async post<T>(url: string, data?: Record<string, any>, config?: AxiosRequestConfig): Promise<Response<T>> {
+    return this.http.post(url, data, config);
   }
 
   async put<T>(url: string, data?: Record<string, any>): Promise<Response<T>> {
